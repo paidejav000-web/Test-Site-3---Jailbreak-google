@@ -1,121 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Museum Educational Demonstration – Historical Concept Only</title>
+  <meta charset="UTF-8">
+  <title>Search Demo – Web Tech Class</title>
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #111;
-      color: #eee;
-      padding: 2rem;
-    }
-    h1, h2 {
-      color: #9ddcff;
-    }
-    input, button {
-      padding: 0.6rem;
-      font-size: 1rem;
-      margin-top: 0.5rem;
-    }
-    .panel {
-      border: 1px solid #444;
-      padding: 1rem;
-      margin-top: 1rem;
-      border-radius: 6px;
-      background: #1b1b1b;
-    }
-    .log {
-      font-family: monospace;
-      white-space: pre-wrap;
-      background: #000;
-      padding: 1rem;
-      margin-top: 1rem;
-      border-radius: 6px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input { padding: 6px; }
+    button { padding: 6px; }
+    li { margin: 6px 0; }
   </style>
 </head>
 <body>
 
-  <h1>Museum Educational Demonstration</h1>
-  <h2>Historical Concept Only: “Content Repackaging Layer”</h2>
+<h2>Search Demo (Local Data)</h2>
+<p>This project demonstrates how search logic works using JavaScript.</p>
 
-  <p>
-    This interactive exhibit simulates how early cybersecurity literature
-    <em>conceptually described</em> content mediation layers.
-    No real network requests occur.
-  </p>
+<input id="query" placeholder="Search term">
+<button onclick="search()">Search</button>
 
-  <div class="panel">
-    <label>
-      Visitor Input (Simulated Search Query):
-      <br />
-      <input id="query" placeholder="e.g., renewable energy history" />
-    </label>
-    <br />
-    <button onclick="simulate()">Run Historical Simulation</button>
-  </div>
+<ul id="results"></ul>
 
-  <div class="panel">
-    <strong>Simulation Log (Conceptual Flow)</strong>
-    <div id="log" class="log"></div>
-  </div>
+<script>
+  // Pretend this is data returned from an API
+  const data = [
+    { title: "HTML Basics", desc: "Introduction to HTML structure" },
+    { title: "JavaScript Fetch", desc: "How web requests work" },
+    { title: "APIs Explained", desc: "What APIs are and how to use them" },
+    { title: "CSS Styling", desc: "Making webpages look good" }
+  ];
 
-  <script>
-    /*
-      HISTORICAL NOTE:
-      This script performs NO network activity.
-      It simulates how academic papers described
-      a “content repackaging layer” using string
-      transformation and staged interpretation.
-    */
+  function search() {
+    const q = document.getElementById("query").value.toLowerCase();
+    const results = document.getElementById("results");
+    results.innerHTML = "";
 
-    function log(message) {
-      const logBox = document.getElementById("log");
-      logBox.textContent += message + "\n";
-      logBox.scrollTop = logBox.scrollHeight;
-    }
-
-    function simulate() {
-      document.getElementById("log").textContent = "";
-
-      const input = document.getElementById("query").value.trim();
-      if (!input) {
-        log("[System] No input provided. Simulation halted.");
-        return;
-      }
-
-      // Stage 1: User-facing request
-      log("Stage 1: User Input Received");
-      log("  Raw Query: \"" + input + "\"\n");
-
-      // Stage 2: Conceptual mediation
-      log("Stage 2: Content Repackaging Layer (Historical Concept)");
-      const transformed = input
-        .toLowerCase()
-        .split(" ")
-        .map(word => "[" + word + "]")
-        .join(" ");
-
-      log("  Abstracted Representation:");
-      log("  " + transformed + "\n");
-
-      // Stage 3: Trust-boundary abstraction
-      log("Stage 3: Destination Identity Abstracted");
-      log("  (No destination specified in historical model)");
-      log("  Content treated as generic information request\n");
-
-      // Stage 4: Simulated response reconstruction
-      log("Stage 4: Reconstructed Informational Output");
-      log("  Output synthesized from conceptual model");
-      log("  No external data accessed\n");
-
-      log("[Simulation Complete]");
-      log("This demonstration reflects academic discussion only.");
-    }
-  </script>
+    data
+      .filter(item =>
+        item.title.toLowerCase().includes(q) ||
+        item.desc.toLowerCase().includes(q)
+      )
+      .forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item.title + " — " + item.desc;
+        results.appendChild(li);
+      });
+  }
+</script>
 
 </body>
 </html>
