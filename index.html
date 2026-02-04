@@ -3,19 +3,39 @@
 <head>
   <meta charset="utf-8">
   <title>PolyTrack</title>
-
-  <!-- THIS is the key -->
-  <base href="https://cdn.jsdelivr.net/gh/genizy/polytrack@feb7f045e85fdf07e0d7f7e6d0f08984b9fe20d6/">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Load the game's real files -->
-  <link rel="stylesheet" href="style.css">
+  <base href="https://cdn.jsdelivr.net/gh/genizy/polytrack@feb7f045e85fdf07e0d7f7e6d0f08984b9fe20d6/">
 </head>
 <body>
 
-  <!-- The game injects itself into the page -->
-  <script src="bundle.js"></script>
+<script>
+(async () => {
+  const base = document.querySelector("base").href;
+
+  // Fetch the worker file
+  const workerText = await fetch("simulation_worker.bundle.js")
+    .then(r => r.text());
+
+  // Replace placeholder with correct base
+  const fixedWorker = workerText.replaceAll(
+    "replacethisplease",
+    base
+  );
+
+  // Create a blob worker (this bypasses GitHub Pages limits)
+  const blob = new Blob([fixedWorker], { type: "application/javascript" });
+  const workerURL = URL.createObjectURL(blob);
+
+  // Expose worker URL globally
+  window.POLYTRACK_WORKER_URL = workerURL;
+
+  // Load main game bundle
+  const script = document.createElement("script");
+  script.src = "bundle.js";
+  document.body.appendChild(script);
+})();
+</script>
 
 </body>
 </html>
