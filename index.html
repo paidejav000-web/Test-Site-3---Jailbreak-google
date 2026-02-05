@@ -2,33 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>API Search Demo</title>
+  <title>PolyTrack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <base href="https://cdn.jsdelivr.net/gh/genizy/polytrack@feb7f045e85fdf07e0d7f7e6d0f08984b9fe20d6/">
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    input {
-      padding: 8px;
-      width: 250px;
-    }
-    button {
-      padding: 8px 12px;
-    }
-    #results {
-      margin-top: 20px;
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
 
-  <h1>Search Wikipedia (API Demo)</h1>
+<script>
+(async () => {
+  const base = document.querySelector("base").href;
 
-  <input id="searchBox" type="text" placeholder="Search something..." />
-  <button onclick="search()">Search</button>
+  const workerText = await fetch("simulation_worker.bundle.js")
+    .then(r => r.text());
 
-  <div id="results"></div>
+  const fixedWorker = workerText.replaceAll(
+    "replacethisplease",
+    base
+  );
 
-  <script src="script.js"></script>
+  const blob = new Blob([fixedWorker], {
+    type: "application/javascript"
+  });
+
+  window.POLYTRACK_WORKER_URL = URL.createObjectURL(blob);
+
+  const script = document.createElement("script");
+  script.src = "bundle.js";
+  document.body.appendChild(script);
+})();
+</script>
+
 </body>
 </html>
